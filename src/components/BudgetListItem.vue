@@ -4,11 +4,12 @@
           <i class="el-icon-bottom" v-else-if=" item.value < 0" />
           <span class="budget-comment">{{item.comment}}</span>
           <span class="budget-value" :style="totalColorByValue">{{item.value}}</span>
-          <ElButton type="danger" size="mini" @click="deleteItem(item.id)">Delete</ElButton>
+          <ElButton type="danger" size="mini" @click="deleteCurrentItem(item)">Delete</ElButton>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex"
 export default {
   name: "BudgetListItem",
   props: {
@@ -16,7 +17,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    deleteItem: Function,
     bdType: String,
 
   },
@@ -25,6 +25,12 @@ export default {
       return {
         color: this.item.value === 0 ? 'black' : this.item.value > 0 ? 'green' : 'red'
       }
+    },
+  },
+  methods: {
+    ...mapActions("budgetStore", ["deleteItem"]),
+    deleteCurrentItem(item){
+      this.deleteItem(item)
     }
   }
 }

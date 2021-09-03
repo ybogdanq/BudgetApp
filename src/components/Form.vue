@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'Form',
   data() {
@@ -51,12 +53,13 @@ export default {
 
   },
   methods: {
+    ...mapActions("budgetStore", ["addItem"]),
     onSubmit(){
       this.$refs.addItemForm.validate(valid => {
         if (valid) {
           const isConfirm = confirm("Would u like to confirm")
           if(isConfirm){
-            this.$emit("submitForm", {...this.formData})
+            this.addItem(this.formData)
             this.$refs.addItemForm.resetFields()
           }
         }

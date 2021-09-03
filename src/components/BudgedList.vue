@@ -8,7 +8,7 @@
       </ElSelect>
       <div class="budget-list-container">
         <template v-if="!isEmpty">
-          <BudgetListItem v-for="(item, prop) in list" :key="prop" v-bind="{deleteItem, item}" :bdType="budgetData.type"/>
+          <BudgetListItem v-for="(item, prop) in getList" :key="prop" v-bind="{item}" :bdType="budgetData.type"/>
         </template>
         <ElAlert v-else type="info" :title="emptyTitle" :closable="false" />
       </div>
@@ -18,14 +18,10 @@
 
 <script>
 import BudgetListItem from "./BudgetListItem.vue"
+import { mapGetters } from "vuex"
+
 export default {
   name: 'BudgetList',
-  props: {
-    list: {
-      type: Object,
-      default: () => ({})
-    }
-  },
   data: () => ({
     budgetData: {
       type: "ALL",
@@ -35,13 +31,11 @@ export default {
   }),
   computed: {
     isEmpty(){
-      return Boolean(!Object.keys(this.list).length)
+      return Boolean(!Object.keys(this.getList).length)
     },
+    ...mapGetters("budgetStore", ["getList"])
   },
   methods: {
-    deleteItem(id) {
-      this.$emit("deleteItem", id)
-    }
   },
   components: {
     BudgetListItem,
